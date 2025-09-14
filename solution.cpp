@@ -29,11 +29,14 @@ int main() {
         
         long long min_s = LLONG_MAX;
         
-        // Try different numbers of non-zero positions
-        // We can consolidate all values into the first k positions
+        // Key insight: We can consolidate all values into the first k positions
+        // for different values of k to minimize S
+        // Since operations only allow moving values leftward (j > i),
+        // the optimal strategy is to distribute the total sum among
+        // the leftmost k positions as evenly as possible
         for (int k = 1; k <= n; k++) {
             // Distribute total_sum among first k positions as evenly as possible
-            // in non-increasing order
+            // in non-increasing order to satisfy the constraint
             vector<long long> optimal(n, 0);
             
             long long base = total_sum / k;
@@ -50,7 +53,7 @@ int main() {
             // Sort the first k positions in non-increasing order
             sort(optimal.begin(), optimal.begin() + k, greater<long long>());
             
-            // Calculate S for this configuration
+            // Calculate S = Σ(min(a₁,...,aᵢ) + max(a₁,...,aᵢ)) for this configuration
             long long s = 0;
             for (int i = 0; i < n; i++) {
                 long long min_val, max_val;
